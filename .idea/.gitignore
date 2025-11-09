@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# Virtualenv
+.venv/
+env/
+venv/
+
+# Playwright
+ms-playwright/
+playwright/.cache/
+storage_state.json
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
