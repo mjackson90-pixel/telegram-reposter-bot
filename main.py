@@ -1,4 +1,3 @@
-вот такой код у меня щас
 #!/usr/bin/env python3
 import asyncio
 import logging
