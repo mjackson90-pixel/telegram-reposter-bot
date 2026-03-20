@@ -47,7 +47,7 @@ CHANNELS_CHECK_NO_NSFW = [c.strip() for c in CHANNELS_CHECK_NO_NSFW if c.strip()
 CHANNELS_REWRITE = [c.strip() for c in CHANNELS_REWRITE if c.strip()]
 
 # --- Стоп-слова ---
-AD_KEYWORDS = ["реклама", "промо", "скидка", "акция", "купить", "оформить", "подпишись", "переходи", "ссылка", "Лепру"]
+AD_KEYWORDS = ["реклама", "промо", "скидка", "акция", "купить", "оформить", "подпишись", "переходи", "ссылка","Лепру"]
 ALLOWED_WORDS = ["спасибо", "пожалуйста", "спс", "благодарю"]
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -246,7 +246,7 @@ async def main():
     duplicate_filter = DuplicateFilter()
     content_filter = ContentFilter()
     
-    # Создаём клиент с StringSession
+    # Создаём клиент с StringSession (без файлов)
     if STRING_SESSION:
         log.info("🔐 Использую STRING_SESSION из переменных окружения")
         session = StringSession(STRING_SESSION)
@@ -359,7 +359,7 @@ async def main():
                     await client.download_media(event.message, temp_check_file)
                     if duplicate_filter.is_duplicate(media_path=temp_check_file):
                         should_publish = False
-                        skip_reason.append("дубликат медиа")
+                        skip_reason.append("duplicate media")
                         log.info("      🚫 Дубликат медиа")
                 except Exception as e:
                     log.error(f"      Ошибка проверки медиа: {e}")
@@ -367,7 +367,7 @@ async def main():
             # Проверка рекламы
             if should_publish and original_text and content_filter.has_ads(original_text):
                 should_publish = False
-                skip_reason.append("реклама")
+                skip_reason.append("ad")
                 log.info("      🚫 Обнаружена реклама")
             
             # Сбор медиа для публикации
@@ -383,7 +383,7 @@ async def main():
                     await client.download_media(media, tf)
                     if await content_filter.is_nsfw(tf):
                         should_publish = False
-                        skip_reason.append("NSFW")
+                        skip_reason.append("nsfw")
                         log.info("      🚫 NSFW обнаружен")
                         break
             
